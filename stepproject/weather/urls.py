@@ -22,5 +22,6 @@ from weather import views
 urlpatterns = [
     path('', views.home, name='home'),
 
-    path('weather/<city>', views.weather, name='weather-in-city')
+    path('weather/<city>', views.get_weather, name='weather-in-city'),
+    path('weather/<city>/test', views.test, name='test')
 ]

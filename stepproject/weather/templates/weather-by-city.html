@@ -1,10 +1,181 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Weather in {{ weather.location }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+
+    <style>
+        body {
+            max-width: 1200px;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            flex-direction: column;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar ul li input {
+            width: calc(100% - 20px);
+            padding: 5px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .sidebar ul li button {
+            width: 100%;
+            padding: 10px;
+            background-color: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .sidebar ul li button:hover {
+            background-color: #777;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            box-sizing: border-box;
+            flex: 1;
+        }
+        .weather-info dl {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .weather-info dd {
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+        .weather-info dt {
+            margin: 0;
+            color: #000;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .weather-info dl {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    {{ city }}
+<div class="container">
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li>
+                <a href="#">Weather</a>
+                <form id="weatherForm" method="get">
+                    <input type="text" id="cityInput" name="city" placeholder="Enter city">
+                    <button type="submit">Show Weather</button>
+                </form>
+            </li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <h1>Weather Information in {{ city }}</h1>
+        <div class="weather-info">
+            <dl>
+                <dd>Location</dd>
+                <dt>{{ weather.location }}</dt>
+                <dd>Weather</dd>
+                <dt>{{ weather.weather }}</dt>
+                <dd>Description</dd>
+                <dt>{{ weather.description }}</dt>
+                <dd>Temperature</dd>
+                <dt>{{ weather.temp }}&deg;C</dt>
+                <dd>Temperature feels like</dd>
+                <dt>{{ weather.temp_feels_like }}&deg;C</dt>
+                <dd>Clouds</dd>
+                <dt>{{ weather.clouds }}%</dt>
+
+                {% if weather.rain %}
+                <dd>Rain</dd>
+                <dt>{{ weather.rain }}</dt>
+                {% endif %}
+
+                {% if weather.snow %}
+                <dd>Snow</dd>
+                <dt>{{ weather.snow }}</dt>
+                {% endif %}
+
+                <dd>Wind speed</dd>
+                <dt>{{ weather.wind_speed }} meter/sec</dt>
+                <dd>Humidity</dd>
+                <dt>{{ weather.humidity }}%</dt>
+            </dl>
+        </div>
+    </div>
+</div>
+<footer>
+    <p>Created by Valeriia M & ChatGPT</p>
+</footer>
+
+<script>
+    document.getElementById('weatherForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const city = document.getElementById('cityInput').value;
+        const url = `{% url 'weather-in-city' 'city' %}`.replace('city', city);
+        window.location.href = url;
+    });
+</script>
 </body>
 </html>
