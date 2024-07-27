@@ -1,0 +1,16 @@
+{% extends "pattern.html "%}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block content %}
+<div class="list">
+    <h1>Search History</h1>
+    <ul>
+        {% for item in list %}
+            <li><a href="{% url 'weather-in-city' item.city %}">{{ item.city }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

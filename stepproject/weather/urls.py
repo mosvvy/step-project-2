@@ -23,5 +23,6 @@ urlpatterns = [
     path('', views.home, name='home'),
 
     path('weather/<city>', views.get_weather, name='weather-in-city'),
+    path('history', views.get_history, name='history'),
     # path('weather/<city>/test', views.test, name='test')
 ]
