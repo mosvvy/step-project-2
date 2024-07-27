@@ -13,12 +13,12 @@ def get_weather(city:str):
                     'id': 702550,
                     'name': 'Lviv', 'cod': 200}
 
-    # API_KEY = "bb162c28be60f5bf4afb31a045255ad2"
-    #
-    # url_pattern = "https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
-    # URL = url_pattern.format(city=city, api_key=API_KEY)
-    # response = requests.get(URL)
-    # api_response = response.json()
+    API_KEY = "bb162c28be60f5bf4afb31a045255ad2"
+
+    url_pattern = "https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    URL = url_pattern.format(city=city, api_key=API_KEY)
+    response = requests.get(URL)
+    api_response = response.json()
 
     weather = {
         'location': api_response.get('name'),
