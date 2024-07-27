@@ -10,7 +10,7 @@ def home(request):
 
 
 def get_weather(request, city):
-    print(request.user)
+
     if request.user:
         weather = utils.get_weather(city)
         search_result = SearchHistory(user=request.user, city=city, result=weather)

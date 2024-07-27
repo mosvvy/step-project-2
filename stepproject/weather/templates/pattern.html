@@ -164,18 +164,18 @@
 .auth button[type="submit"]:hover {
     background-color: #0056b3;
 }
-        ul {
+        .list ul {
             list-style: none;
             padding: 0;
         }
-        ul li {
+        .list ul li {
             margin: 20px 0;
         }
-        ul li a {
+        .list ul li a {
             color: #555;
             text-decoration: none;
         }
-        ul li:hover {
+        .list ul li:hover {
             background-color: #bbb;
         }
 
@@ -194,16 +194,17 @@
                     <button type="submit">Show Weather</button>
                 </form>
             </li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
         </ul>
         <hr>
         <h2>Hello, {{ user }}</h2>
         <ul>
+            {% if request.user.is_anonymous %}
             <li><a href="{% url 'register' %}">Register</a></li>
             <li><a href="{% url 'login' %}">Log In</a></li>
+            {% else %}
             <li><a href="{% url 'history' %}">Search History</a></li>
             <li><form method="POST" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log Out</button> </form></li>
+            {% endif %}
         </ul>
     </div>
     <div class="main-content">
