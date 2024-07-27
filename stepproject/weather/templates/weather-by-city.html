@@ -1,0 +1,41 @@
+{% extends "pattern.html "%}
+{% load static %}
+
+{% block title %}
+Weather in {{ weather.location }}
+{% endblock %}
+
+{% block content %}
+<h1>Weather Information in {{ city }}</h1>
+<div class="weather-info">
+    <dl>
+        <dd>Location</dd>
+        <dt>{{ weather.location }}</dt>
+        <dd>Weather</dd>
+        <dt>{{ weather.weather }}</dt>
+        <dd>Description</dd>
+        <dt>{{ weather.description }}</dt>
+        <dd>Temperature</dd>
+        <dt>{{ weather.temp }}&deg;C</dt>
+        <dd>Temperature feels like</dd>
+        <dt>{{ weather.temp_feels_like }}&deg;C</dt>
+        <dd>Clouds</dd>
+        <dt>{{ weather.clouds }}%</dt>
+
+        {% if weather.rain %}
+        <dd>Rain</dd>
+        <dt>{{ weather.rain }}</dt>
+        {% endif %}
+
+        {% if weather.snow %}
+        <dd>Snow</dd>
+        <dt>{{ weather.snow }}</dt>
+        {% endif %}
+
+        <dd>Wind speed</dd>
+        <dt>{{ weather.wind_speed }} meter/sec</dt>
+        <dd>Humidity</dd>
+        <dt>{{ weather.humidity }}%</dt>
+    </dl>
+</div>
+{% endblock %}

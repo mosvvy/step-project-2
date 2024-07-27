@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Weather{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+
+    <style>
+        body {
+            max-width: 1200px;
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            flex-direction: column;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            position: fixed;
+        }
+        .sidebar h2 {
+            margin-top: 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .sidebar ul li input {
+            width: calc(100% - 20px);
+            padding: 5px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        .sidebar ul li button {
+            width: 100%;
+            padding: 10px;
+            background-color: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .sidebar ul li button:hover {
+            background-color: #777;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            box-sizing: border-box;
+            flex: 1;
+        }
+        .weather-info dl {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .weather-info dd {
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+        .weather-info dt {
+            margin: 0;
+            color: #000;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .weather-info dl {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .auth form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+.auth form div {
+    margin-bottom: 15px;
+}
+
+.auth label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.auth input[type="text"],
+.auth input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.auth .helptext {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.auth button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.auth button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+        .list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .list ul li {
+            margin: 20px 0;
+        }
+        .list ul li a {
+            color: #555;
+            text-decoration: none;
+        }
+        .list ul li:hover {
+            background-color: #bbb;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li>
+                <a href="#">Weather</a>
+                <form id="weatherForm" method="get">
+                    <input type="text" id="cityInput" name="city" placeholder="Enter city">
+                    <button type="submit">Show Weather</button>
+                </form>
+            </li>
+        </ul>
+        <hr>
+        <h2>Hello, {{ user }}</h2>
+        <ul>
+            {% if request.user.is_anonymous %}
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Log In</a></li>
+            {% else %}
+            <li><a href="{% url 'history' %}">Search History</a></li>
+            <li><form method="POST" action="{% url 'logout' %}">{% csrf_token %}<button type="submit">Log Out</button> </form></li>
+            {% endif %}
+        </ul>
+    </div>
+    <div class="main-content">
+        {% block content %}
+        <h1>Welcome to My Website</h1>
+        <p>This is the main content area.</p>
+        {% endblock %}
+    </div>
+</div>
+<footer>
+    <p>Created by Valeriia M <small>(via ChatGPT for "beauty")</small></p>
+</footer>
+
+<script>
+    document.getElementById('weatherForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const city = document.getElementById('cityInput').value;
+        const url = `{% url 'weather-in-city' 'city' %}`.replace('city', city);
+        window.location.href = url;
+    });
+</script>
+</body>
+</html>
